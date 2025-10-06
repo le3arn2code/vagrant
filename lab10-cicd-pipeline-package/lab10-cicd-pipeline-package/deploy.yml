@@ -1,0 +1,19 @@
+
+---
+- name: Deploy changes to the server
+  hosts: all
+  tasks:
+    - name: Pull the latest changes from GitHub (as toor)
+      become: false
+      git:
+        repo: 'git@github.com:le3arn2code/lab10-cicd-pipeline.git'
+        dest: /home/toor/deployment_pipeline
+        version: main
+        key_file: /home/toor/.ssh/id_ed25519
+        accept_hostkey: yes
+
+    - name: Restart web server (nginx)
+      become: yes
+      service:
+        name: nginx
+        state: restarted
